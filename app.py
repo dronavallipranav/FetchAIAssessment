@@ -7,8 +7,8 @@ import numpy as np
 from model import ShallowNet
 
 app = Flask(__name__)
-#allow all cross origin requests
-CORS(app)
+#CORS for just frontend
+CORS(app, resources={r"/*": {"origins": "http://localhost:4321"}})
 model = ShallowNet(4, 5, 1)
 model.load_state_dict(torch.load('model.pth'))
 model.eval()
