@@ -1,0 +1,91 @@
+---
+import "../styles.css";
+---
+
+<html lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="generator" content={Astro.generator} />
+		<title>Receipt Predictor</title>
+	</head>
+	<body class="min-h-screen flex items-center justify-center bg-gray-100">
+		<div class="bg-white p-6 rounded- w-1/2 shadow-lg">
+			<h1 class="text-2xl font-bold mb-4 text-center">Receipt Predictor</h1>
+			<div class = "text-center">
+				<input id="daysInput" type="number" class="p-2 border text-center rounded-lg mr-2" placeholder="Enter number of days" />
+				<button id="fetchButton" class="bg-blue-500 text-white p-2 rounded-lg">Make Predictions</button>
+			</div>
+			<div id="result" class="mt-4"></div>
+		</div>
+	</body>
+</html>
+<script>
+
+	//Script sends request to backend and displays results in a table
+	 document.getElementById('fetchButton').addEventListener('click', async () => {
+		try {
+			let daysInput = document.getElementById('daysInput').value || 5; 
+			const response = await fetch('http://localhost:5001/predict', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ days: daysInput }),
+			});
+	
+			if (!response.ok) {
+				throw new Error(`HTTP error! Status: ${response.status}`);
+			}
+	
+			const json = await response.json();
+			const resultDiv = document.getElementById('result');
+			resultDiv.innerHTML = ''; 
+			
+			const table = document.createElement('table');
+			table.style.width = '100%';
+			table.style.textAlign = 'center';
+			table.style.borderCollapse = 'collapse';
+			
+			const thead = document.createElement('thead');
+			const headerRow = document.createElement('tr');
+			const dateHeader = document.createElement('th');
+			const countHeader = document.createElement('th');
+			
+			dateHeader.textContent = 'Date';
+			countHeader.textContent = 'Receipt_Count';
+			
+			headerRow.appendChild(dateHeader);
+			headerRow.appendChild(countHeader);
+			thead.appendChild(headerRow);
+			table.appendChild(thead);
+			
+			const tbody = document.createElement('tbody');
+			//iterate over result array
+			json.data.forEach(row => {
+				const tr = document.createElement('tr');
+				const dateCell = document.createElement('td');
+				const countCell = document.createElement('td');
+				
+				//set data cell and count cell as first and second element of each row
+				dateCell.textContent = row[0];
+				countCell.textContent = row[1]; 
+				
+				dateCell.style.borderBottom = '1px solid #ccc'; 
+                countCell.style.borderBottom = '1px solid #ccc';
+
+				tr.appendChild(dateCell);
+				tr.appendChild(countCell);
+				tbody.appendChild(tr);
+			});
+
+			table.appendChild(tbody);
+			
+			resultDiv.appendChild(table);
+		} catch (error) {
+			console.error('Fetch Error: ', error);
+		}
+	});
+</script>
+	
