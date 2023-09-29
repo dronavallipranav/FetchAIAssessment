@@ -44,6 +44,7 @@ Make sure you have nvm for easy package management.
    docker build -t backend_model .
    docker run -it -p 5001:5001 backend_model
    ```
+Once the server is started, open a new terminal instance
 3. Install dependencies
    ```sh
    cd frontend/webApp
