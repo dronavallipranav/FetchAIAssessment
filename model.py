@@ -31,8 +31,8 @@ df['day_number'] = np.arange(len(df))
 df['month'] = df['# Date'].str[5:7]
 df['day'] = df['# Date'].str[8:].astype('int32')
 #Adding lag values
-df['lag_1'] = df['Receipt_Count'].shift(1).div(1000)
-df['lag_2'] = df['Receipt_Count'].shift(2).div(1000)
+df['lag_1'] = df['Receipt_Count'].shift(1)
+df['lag_2'] = df['Receipt_Count'].shift(2)
 df = df.dropna() 
 
 X = df[['day_number', 'day', 'lag_1', 'lag_2']].values.astype('float32')
