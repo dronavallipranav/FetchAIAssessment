@@ -36,8 +36,8 @@ def predict():
         temp_df = pd.read_csv("data_daily.csv")
         last_two_values = temp_df['Receipt_Count'].iloc[-2:].values.tolist()
 
-        initial_lag_1 = last_two_values[1]
-        initial_lag_2 = last_two_values[0]
+        initial_lag_1 = last_two_values[1].div(1000)
+        initial_lag_2 = last_two_values[0].div(1000)
         predictions = []
         
         #iterate over the number of days requested making prediction on each row
@@ -46,11 +46,11 @@ def predict():
                 df.loc[i, 'lag_1'] = initial_lag_1
                 df.loc[i, 'lag_2'] = initial_lag_2
             elif i == 1:
-                df.loc[i, 'lag_1'] = predictions[-1] 
+                df.loc[i, 'lag_1'] = predictions[-1].div(1000)
                 df.loc[i, 'lag_2'] = initial_lag_1 
             else:
-                df.loc[i, 'lag_1'] = predictions[-1]
-                df.loc[i, 'lag_2'] = predictions[-2]
+                df.loc[i, 'lag_1'] = predictions[-1].div(1000)
+                df.loc[i, 'lag_2'] = predictions[-2].div(1000)
 
             #convert row to tensor
             X_test_tensor = torch.tensor(df.loc[i, ['day_number', 'day', 'lag_1', 'lag_2']].values.astype('float32').reshape(1, -1), dtype=torch.float32)
@@ -69,4 +69,4 @@ def predict():
 
 #run app
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port = 5001)
+    app.run(debug=False, host='0.0.0.0', port = 5001)

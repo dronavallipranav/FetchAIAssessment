@@ -31,8 +31,8 @@ df['day_number'] = np.arange(len(df))
 df['month'] = df['# Date'].str[5:7]
 df['day'] = df['# Date'].str[8:].astype('int32')
 #Adding lag values
-df['lag_1'] = df['Receipt_Count'].shift(1)
-df['lag_2'] = df['Receipt_Count'].shift(2)
+df['lag_1'] = df['Receipt_Count'].shift(1).div(1000)
+df['lag_2'] = df['Receipt_Count'].shift(2).div(1000)
 df = df.dropna() 
 
 X = df[['day_number', 'day', 'lag_1', 'lag_2']].values.astype('float32')
@@ -52,7 +52,8 @@ y_test_tensor = torch.tensor(y_test.reshape(-1, 1), dtype=torch.float32)
 input_size = X_train.shape[1]
 model = ShallowNet(input_size, 5, 1)
 criterion = nn.MSELoss()
-optimizer = optim.Adam(model.parameters(), lr=0.01)
+torch.manual_seed(43) 
+optimizer = optim.Adam(model.parameters(), lr=0.02)
 
 epochs = 2000
 for epoch in range(epochs):
