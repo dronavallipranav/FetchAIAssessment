@@ -33,25 +33,25 @@ Make sure you have nvm for easy package management.
     nvm use 18.17.1
   ```
 
-### Installation
+### Setup
 
 1. Clone the repo
    ```sh
    git clone https://github.com/dronavallipranav/FetchBackendAPI.git
    ```
-2. Install NPM packages
+2. build the docker image and run the container backend on port 5001
+   ```sh
+   docker build -t backend_model .
+   docker run -it -p 5001:5001 backend_model
+   ```
+3. Install dependencies
    ```sh
    cd frontend/webApp
    npm install
    ```
-3. Start the frontend on port 4321
+4. Start the frontend on port 4321
     ```sh
    npm run dev
-   ```
-4. build the docker image and run the container backend on port 5001
-   ```sh
-   docker build -t backend_model .
-   docker run -it -p 5001:5001 backend_model
    ```
 
 ## Usage
