@@ -53,9 +53,9 @@ input_size = X_train.shape[1]
 model = ShallowNet(input_size, 5, 1)
 criterion = nn.MSELoss()
 torch.manual_seed(43) 
-optimizer = optim.Adam(model.parameters(), lr=0.02)
+optimizer = optim.Adam(model.parameters(), lr=0.01)
 
-epochs = 2000
+epochs = 3000
 for epoch in range(epochs):
 
     outputs = model(X_train_tensor)
